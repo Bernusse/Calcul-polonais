@@ -7,7 +7,8 @@
 using namespace std;
 
 string saisie() {
-    string expr, ligne;
+    string expr;
+    string ligne;
     ifstream f("calcul.txt");
     if (!f) throw runtime_error("Erreur : fichier introuvable");
     while (getline(f, ligne)) expr += ligne + " ";
