@@ -1,11 +1,3 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <iostream>
 #include <fstream>
 #include <stack>
@@ -24,28 +16,27 @@ string saisie() {
 }
 
 
-double operation(double a, double b, const string& op) {
-    if (op == "+") return a + b;
-    if (op == "-") return a - b;
-    if (op == "*") return a * b;
-    if (op == "/") {
-        if (b == 0) throw runtime_error("Erreur: division par zéro");
-        return a / b;
+double operation(double operandeGauche, double operandeDroite, const string& operateur) {
+    if (operateur == "+") return operandeGauche + operandeDroite;
+    if (operateur == "-") return operandeGauche - operandeDroite;
+    if (operateur == "*") return operandeGauche * operandeDroite;
+    if (operateur == "/") {
+        if (operandeDroite < 0.00000000001) throw runtime_error("Division par zéro");
+        return operandeGauche / operandeDroite;
     }
-    throw runtime_error("Erreur: opérateur inconnu " + op);
+    throw runtime_error("Opérateur inconnu : " + operateur);
 }
 
-
 double calcul(const string& expr) {
-    stack<double> s; stringstream ss(expr); string t;
-    while (ss >> t) {
-        if (isdigit(t[0]) || (t.size()>1 && isdigit(t[1]))) { s.push(stod(t)); continue; }
-        if (s.size() < 2) throw runtime_error("Erreur: opérande manquante");
-        double b=s.top(); s.pop(); double a=s.top(); s.pop();
-        s.push(operation(a,b,t));
+    stack<double> pile; stringstream flux(expr); string jeton;
+    while (flux >> jeton) {
+        if (isdigit(jeton[0]) || (jeton.size()>1 && isdigit(jeton[1]))) { pile.push(stod(jeton)); continue; }
+        if (pile.size() < 2) throw runtime_error("Erreur: opérande manquante");
+        double operandeDroite=pile.top(); pile.pop(); double operandeGauche=pile.top(); pile.pop();
+        pile.push(operation(operandeGauche,operandeDroite,jeton));
     }
-    if (s.size()!=1) throw runtime_error("Erreur: expression invalide");
-    return s.top();
+    if (pile.size()!=1) throw runtime_error("Erreur: expression invalide");
+    return pile.top();
 }
 
 void erreur(const string& msg) {
@@ -62,3 +53,4 @@ int main() {
         erreur(e.what());
     }
 }
+
