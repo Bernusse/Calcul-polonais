@@ -1,11 +1,3 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <iostream>
 #include <fstream>
 #include <stack>
@@ -29,7 +21,8 @@ double operation(double operandeGauche, double operandeDroite, const string& ope
     if (operateur == "-") return operandeGauche - operandeDroite;
     if (operateur == "*") return operandeGauche * operandeDroite;
     if (operateur == "/") {
-        if (abs(operandeDroite) == 0) throw runtime_error("Division par zéro");
+        if (abs(operandeDroite) < 0.00000000001
+        ) throw runtime_error("Division par zéro");
         return operandeGauche / operandeDroite;
     }
     throw runtime_error("Opérateur inconnu : " + operateur);
@@ -61,4 +54,5 @@ int main() {
         erreur(e.what());
     }
 }
+
 
