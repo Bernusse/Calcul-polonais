@@ -7,9 +7,9 @@
 using namespace std;
 
 string saisie() {
+    string expr, ligne;
     ifstream f("calcul.txt");
     if (!f) throw runtime_error("Erreur : fichier introuvable");
-    string expr, ligne;
     while (getline(f, ligne)) expr += ligne + " ";
     if (expr.empty()) throw runtime_error("Erreur : fichier vide");
     return expr;
@@ -29,11 +29,17 @@ double operation(double operandeGauche, double operandeDroite, const string& ope
 }
 
 double calcul(const string& expr) {
-    stack<double> pile; stringstream flux(expr); string jeton;
+    stack<double> pile;
+    stringstream flux(expr);
+    string jeton;
     while (flux >> jeton) {
         if (isdigit(jeton[0]) || (jeton.size()>1 && isdigit(jeton[1]))) { pile.push(stod(jeton)); continue; }
         if (pile.size() < 2) throw runtime_error("Erreur: opérande manquante");
-        double operandeDroite=pile.top(); pile.pop(); double operandeGauche=pile.top(); pile.pop();
+        double operandeDroite = pile.top(); 
+        pile.pop(); 
+        double operandeGauche = pile.top(); 
+        pile.pop();
+        
         pile.push(operation(operandeGauche,operandeDroite,jeton));
     }
     if (pile.size()!=1) throw runtime_error("Erreur: expression invalide");
@@ -54,5 +60,3 @@ int main() {
         erreur(e.what());
     }
 }
-
-
